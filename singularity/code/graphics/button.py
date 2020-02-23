@@ -147,15 +147,15 @@ class Button(text.SelectableText, HotkeyText):
         if self.visible and getattr(self, "collision_rect", None):
             # This gets called a lot, so it's been optimized.
             select_now = self.is_over(pygame.mouse.get_pos())
-            if (self._selected ^ select_now): # If there's a change.
+            if self.enabled and (self._selected ^ select_now):  # If there's a change.
                 self.selected = select_now
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONUP:
-            if self.visible and self.is_over(event.pos):
+            if self.visible and self.enabled and self.is_over(event.pos):
                 self.activate_with_sound(event)
         elif event.type == pygame.KEYDOWN:
-            if self.visible and self.hotkey in (event.unicode, event.key):
+            if self.visible and self.enabled and self.hotkey in (event.unicode, event.key):
                 self.activate_with_sound(event)
 
     def activate_with_sound(self, event):
